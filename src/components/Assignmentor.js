@@ -7,6 +7,8 @@ import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from './Connection';
 import { useFormik } from 'formik';
+import Loading from './Loading';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -25,6 +27,8 @@ function Assignmentor() {
     const [mentors, setMentors] = useState([]);
     const [checkedlist, setCheckedList] = useState([])
     const [studentsList, setStudentsList] = useState([]);
+    const history = useHistory();
+    const [isLoading, setIsLoading] = useState(false);
     const formik = useFormik({
         initialValues: {
             mentor: '',
@@ -49,10 +53,12 @@ function Assignmentor() {
                 SelectedStudents.map(objID =>
                     setMentorToStudent(objID)
                 )
+                setIsLoading(true);
                 getStudents();
-                console.log(SelectedStudents)
             }
             handleformsubmit();
+            history.push('/');
+            setIsLoading(false)
         }
 
     });
@@ -82,9 +88,6 @@ function Assignmentor() {
         //get mentor id
         setMentorID(event.target.value);
         formik.values.mentor = event.target.value;
-        //Assign mentor id to student
-        // getStudents(event.target.value);
-        //update mentor with student id
     };
     const handleCheckbox = (position) => {
 
@@ -103,8 +106,16 @@ function Assignmentor() {
     }
     useEffect(() => {
         const getMentors = async () => {
-            let mentorData = await axios.get('/getmentors');
-            setMentors(mentorData.data);
+            try {
+                setIsLoading(true);
+                let mentorData = await axios.get('/getmentors');
+                setIsLoading(false);
+                setMentors(mentorData.data);
+            } catch (error) {
+                setIsLoading(false);
+                console.log(error)
+            }
+
         }
 
         getMentors();
@@ -136,25 +147,30 @@ function Assignmentor() {
                         {formik.errors.mentor ? <span style={{ color: 'red' }}>{formik.errors.mentor}</span> : ''}
                     </form>
                 </div>
-                <form className="row checked-lists" onSubmit={formik.handleSubmit}>
-                    <div className="custom-control custom-checkbox col-12 check-list-container">
-                        {formik.errors.checked ? <span style={{ color: 'red' }}>{formik.errors.checked}</span> : ''}
-                        {studentsList.map((student, index) => {
-                            return (<div key={student._id}>
-                                <div className="pl-5">
-                                    <input type="checkbox" className="custom-control-input" onChange={() => handleCheckbox(index, student._id)} checked={checkedlist[index]} id={`customCheck${index}`} />
-                                    <label className="custom-control-label" htmlFor={`customCheck${index}`}>{student.name}</label>
-                                </div>
-                                <hr className="row" />
+                {
+                    isLoading ? <Loading /> : (
+                        <form className="row checked-lists" onSubmit={formik.handleSubmit}>
+                            <div className="custom-control custom-checkbox col-12 check-list-container">
+                                {formik.errors.checked ? <span style={{ color: 'red' }}>{formik.errors.checked}</span> : ''}
+                                {studentsList.map((student, index) => {
+                                    return (<div key={student._id}>
+                                        <div className="pl-5">
+                                            <input type="checkbox" className="custom-control-input" onChange={() => handleCheckbox(index, student._id)} checked={checkedlist[index]} id={`customCheck${index}`} />
+                                            <label className="custom-control-label" htmlFor={`customCheck${index}`}>{student.name}</label>
+                                        </div>
+                                        <hr className="row" />
+                                    </div>
+                                    )
+                                })
+                                }
                             </div>
-                            )
-                        })
-                        }
-                    </div>
-                    <div className="text-center col-12">
-                        <input type="submit" value="Submit" className="btn btn-outline-danger btn-lg col-6" />
-                    </div>
-                </form>
+                            <div className="text-center col-12">
+                                <input type="submit" value="Submit" className="btn btn-outline-danger btn-lg col-6" />
+                            </div>
+                        </form>
+                    )
+                }
+
             </div>
         </>
     )

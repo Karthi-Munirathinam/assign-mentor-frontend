@@ -6,6 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from './Connection';
+import Loading from './Loading';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -23,6 +24,7 @@ function Homepage() {
     const [mentorID, setMentorID] = useState('');
     const [mentors, setMentors] = useState([]);
     const [students, setStudents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const getStudents = async (id) => {
         let studentsdata = await axios.get(`/getstudents/${id}`);
@@ -38,8 +40,16 @@ function Homepage() {
 
     useEffect(() => {
         const getMentors = async () => {
-            let mentorData = await axios.get('/getmentors');
-            setMentors(mentorData.data);
+            try {
+                setIsLoading(true);
+                let mentorData = await axios.get('/getmentors');
+                setMentors(mentorData.data);
+                setIsLoading(false)
+            } catch (error) {
+                setIsLoading(false);
+                console.log(error)
+            }
+
         }
         getMentors();
     }, [])
@@ -67,23 +77,28 @@ function Homepage() {
                     </FormControl>
                 </div>
             </div>
-            <div className="row p-1">
-                <div className="col-12">
-                    <h5 className="pl-5 text-center m-4" style={{ color: "red" }}>Students Name</h5>
-                    <div className="studentname-container">
-                        {
-                            students.map(obj => {
-                                return (
-                                    <div className="col-12 text-center" key={obj._id}>
-                                        <h6 className="pl-5">{obj.name}</h6>
-                                        <hr className="row" />
-                                    </div>
-                                )
-                            })
-                        }
+            {
+                isLoading ? <Loading /> : (
+                    <div className="row p-1">
+                        <div className="col-12">
+                            <h5 className="pl-5 text-center m-4" style={{ color: "red" }}>Students Name</h5>
+                            <div className="studentname-container">
+                                {
+                                    students.map(obj => {
+                                        return (
+                                            <div className="col-12 text-center" key={obj._id}>
+                                                <h6 className="pl-5">{obj.name}</h6>
+                                                <hr className="row" />
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                )
+            }
+
         </div>
     )
 }

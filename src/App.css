@@ -71,3 +71,9 @@ body {
   overflow: auto;
   color: rgb(22, 84, 255);
 }
+.loadingscreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
