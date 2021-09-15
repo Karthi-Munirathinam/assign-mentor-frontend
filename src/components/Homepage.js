@@ -20,16 +20,19 @@ const useStyles = makeStyles((theme) => ({
 function Homepage() {
 
     const classes = useStyles();
-    const [mentor, setMentor] = useState('');
+    const [mentorID, setMentorID] = useState('');
     const [mentors, setMentors] = useState([]);
+    const [students, setStudents] = useState([]);
 
     const getStudents = async (id) => {
         let studentsdata = await axios.get(`/getstudents/${id}`);
-        console.log(studentsdata.data)
+        let studentsid = studentsdata.data;
+        console.log(studentsid)
+        setStudents(studentsid)
     };
 
     const handleChange = (event) => {
-        setMentor(event.target.value);
+        setMentorID(event.target.value);
         getStudents(event.target.value);
     };
 
@@ -50,7 +53,7 @@ function Homepage() {
                         <InputLabel htmlFor="mentor">Mentor</InputLabel>
                         <Select
                             name="mentor"
-                            value={mentor}
+                            value={mentorID}
                             onChange={(event) => handleChange(event)}
                             label="Mentor"
                         >
@@ -64,9 +67,21 @@ function Homepage() {
                     </FormControl>
                 </div>
             </div>
-            <div className="row">
+            <div className="row p-1">
                 <div className="col-12">
-                    hi
+                    <h5 className="pl-5 text-center m-4" style={{ color: "red" }}>Students Name</h5>
+                    <div className="studentname-container">
+                        {
+                            students.map(obj => {
+                                return (
+                                    <div className="col-12 text-center" key={obj._id}>
+                                        <h6 className="pl-5">{obj.name}</h6>
+                                        <hr className="row" />
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
         </div>
