@@ -29,8 +29,7 @@ function Homepage() {
     const getStudents = async (id) => {
         let studentsdata = await axios.get(`/getstudents/${id}`);
         let studentsid = studentsdata.data;
-        console.log(studentsid)
-        setStudents(studentsid)
+        setStudents(studentsid);
     }
 
     const handleChange = (event) => {

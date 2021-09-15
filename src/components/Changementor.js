@@ -84,8 +84,7 @@ function Changementor() {
 
     const getCurrentMentor = async (studentID) => {
         let mentorData = await axios.get(`/getmentor/${studentID}`);
-        setCurrentMentorID(mentorData.data[0]._id)
-        console.log(mentorData.data[0]._id);
+        setCurrentMentorID(mentorData.data[0]._id);
     }
 
     useEffect(() => {
