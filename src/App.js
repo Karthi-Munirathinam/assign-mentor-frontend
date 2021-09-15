@@ -1,24 +1,36 @@
-import logo from './logo.svg';
+import Appbar from './components/Appbar';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import Createuser from './components/Createuser';
+import Assignmentor from './components/Assignmentor';
+import Homepage from './components/Homepage';
+import Changementor from './components/Changementor';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Appbar />
+        <Switch>
+          <Route path="/createuser" exact>
+            <Createuser />
+          </Route>
+          <Route path="/assignmentor" exact>
+            <Assignmentor />
+          </Route>
+          <Route path="/changementor" exact>
+            <Changementor />
+          </Route>
+          <Route path="/" exact>
+            <Homepage />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
