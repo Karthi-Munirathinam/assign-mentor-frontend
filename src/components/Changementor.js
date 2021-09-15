@@ -64,17 +64,13 @@ function Changementor() {
             setIsLoading(false);
             console.log(error);
         }
-
     };
 
-
-
     const handleChange = (event) => {
-        //get mentor id
         setStudentID(event.target.value);
         formik.values.student = event.target.value;
         getCurrentMentor(event.target.value)
-    };
+    }
 
     const handleRadioButton = (e) => {
         setCurrentMentorID(e.target.value);
@@ -103,9 +99,7 @@ function Changementor() {
                 setIsLoading(false);
                 console.log(error);
             }
-
         }
-
         getMentors();
         getStudents();
     }, [])
@@ -124,7 +118,6 @@ function Changementor() {
                                 onChange={(event) => handleChange(event)}
                                 label="student"
                             >
-
                                 {
                                     students.map((file) => {
                                         return (<MenuItem key={file._id} name="checked" value={file._id}>{file.name}</MenuItem>)

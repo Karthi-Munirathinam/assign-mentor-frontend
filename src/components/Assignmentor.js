@@ -29,6 +29,7 @@ function Assignmentor() {
     const [studentsList, setStudentsList] = useState([]);
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
+
     const formik = useFormik({
         initialValues: {
             mentor: '',
@@ -62,6 +63,7 @@ function Assignmentor() {
         }
 
     });
+
     const setMentorToStudent = async (studentID) => {
         try {
             await axios.put(`/assignmentor/${studentID}`, {
@@ -85,10 +87,10 @@ function Assignmentor() {
     }
 
     const handleChange = (event) => {
-        //get mentor id
         setMentorID(event.target.value);
         formik.values.mentor = event.target.value;
-    };
+    }
+
     const handleCheckbox = (position) => {
 
         const updateCheckedList = checkedlist.map((list, index) => {
@@ -104,6 +106,7 @@ function Assignmentor() {
         const arr = new Array(studentData.data.length).fill(false)
         setCheckedList(arr);
     }
+
     useEffect(() => {
         const getMentors = async () => {
             try {
@@ -115,9 +118,7 @@ function Assignmentor() {
                 setIsLoading(false);
                 console.log(error)
             }
-
         }
-
         getMentors();
         getStudents();
     }, [])

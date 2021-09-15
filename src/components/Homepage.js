@@ -31,12 +31,12 @@ function Homepage() {
         let studentsid = studentsdata.data;
         console.log(studentsid)
         setStudents(studentsid)
-    };
+    }
 
     const handleChange = (event) => {
         setMentorID(event.target.value);
         getStudents(event.target.value);
-    };
+    }
 
     useEffect(() => {
         const getMentors = async () => {
@@ -49,7 +49,6 @@ function Homepage() {
                 setIsLoading(false);
                 console.log(error)
             }
-
         }
         getMentors();
     }, [])

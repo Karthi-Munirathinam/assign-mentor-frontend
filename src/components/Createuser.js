@@ -8,7 +8,6 @@ import axios from './Connection'
 import { useHistory } from 'react-router';
 import Loading from './Loading';
 
-
 function Createuser() {
     const [role, setRole] = useState('');
     const [name, setName] = useState('');
@@ -16,6 +15,7 @@ function Createuser() {
     const [dob, setDOB] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
+
     const handleChange = (event) => {
         setRole(event.target.value);
     };
@@ -48,7 +48,6 @@ function Createuser() {
             setIsLoading(false);
             console.log(error);
         }
-
     }
 
     return (
